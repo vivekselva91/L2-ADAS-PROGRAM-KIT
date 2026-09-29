@@ -1,0 +1,69 @@
+# Interface control: who owns each signal, its timing budget and failure
+# behaviour. This is the artifact that stops OEM and supplier integration
+# arguments, because ownership is written down before the first build.
+interfaces:
+  - id: ICD-RADAR-01
+    signal: lead_vehicle_distance
+    producer: RADAR_IF
+    consumer: ACC_CONTROLLER
+    owner: Supplier
+    unit: m
+    range: [0, 250]
+    period_ms: 50
+    timeout_ms: 200
+    on_timeout: degrade_to_speed_control
+
+  - id: ICD-RADAR-02
+    signal: lead_vehicle_relative_speed
+    producer: RADAR_IF
+    consumer: ACC_CONTROLLER
+    owner: Supplier
+    unit: m/s
+    range: [-60, 60]
+    period_ms: 50
+    timeout_ms: 200
+    on_timeout: degrade_to_speed_control
+
+  - id: ICD-CAM-01
+    signal: lane_center_offset
+    producer: CAMERA_IF
+    consumer: LKA_CONTROLLER
+    owner: OEM
+    unit: m
+    range: [-3.7, 3.7]
+    period_ms: 33
+    timeout_ms: 300
+    on_timeout: disengage_lateral
+
+  - id: ICD-CAM-02
+    signal: lane_heading_error
+    producer: CAMERA_IF
+    consumer: LKA_CONTROLLER
+    owner: OEM
+    unit: rad
+    range: [-0.5, 0.5]
+    period_ms: 33
+    timeout_ms: 300
+    on_timeout: disengage_lateral
+
+  - id: ICD-VEH-01
+    signal: hands_on_wheel
+    producer: VEHICLE_BUS
+    consumer: SAFETY_MONITOR
+    owner: OEM
+    unit: bool
+    range: [0, 1]
+    period_ms: 100
+    timeout_ms: 500
+    on_timeout: takeover_request
+
+  - id: ICD-ACT-01
+    signal: acceleration_command
+    producer: ACC_CONTROLLER
+    consumer: VEHICLE_BUS
+    owner: Supplier
+    unit: m/s2
+    range: [-3.5, 2.0]
+    period_ms: 20
+    timeout_ms: 100
+    on_timeout: coast

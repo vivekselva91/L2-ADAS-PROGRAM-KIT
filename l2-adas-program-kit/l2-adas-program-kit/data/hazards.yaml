@@ -1,0 +1,53 @@
+# ISO 26262 hazard analysis and risk assessment (HARA).
+# Severity, Exposure and Controllability drive the ASIL, which is derived by
+# the tool rather than hand-entered, so the classification stays auditable.
+hazards:
+  - id: HAZ-001
+    hazard: Unintended acceleration while following a lead vehicle
+    situation: Highway following at 30 m/s
+    severity: S3
+    exposure: E4
+    controllability: C2
+    safety_goal: Longitudinal acceleration shall not exceed the commanded bound
+    goal_id: SG-001
+    mitigates: [SYS-REQ-007]
+
+  - id: HAZ-002
+    hazard: Unintended steering command causing lane departure
+    situation: Highway curve at 28 m/s
+    severity: S3
+    exposure: E4
+    controllability: C2
+    safety_goal: Steering rate shall remain within driver-overridable bounds
+    goal_id: SG-002
+    mitigates: [SYS-REQ-008]
+
+  - id: HAZ-003
+    hazard: Loss of lane signal with lateral control still active
+    situation: Highway, degraded lane markings
+    severity: S3
+    exposure: E3
+    controllability: C2
+    safety_goal: Lateral control shall disengage on loss of lane signal
+    goal_id: SG-003
+    mitigates: [SYS-REQ-005]
+
+  - id: HAZ-004
+    hazard: Driver disengaged from the driving task for an extended period
+    situation: Highway cruise, hands off wheel
+    severity: S3
+    exposure: E4
+    controllability: C3
+    safety_goal: System shall escalate takeover requests and disengage
+    goal_id: SG-004
+    mitigates: [SYS-REQ-006]
+
+  - id: HAZ-005
+    hazard: Insufficient deceleration for a braking lead vehicle
+    situation: Highway following, lead brakes hard
+    severity: S3
+    exposure: E4
+    controllability: C3
+    safety_goal: System shall maintain minimum safe distance or request takeover
+    goal_id: SG-005
+    mitigates: [SYS-REQ-003]

@@ -1,0 +1,103 @@
+# System requirements for an L2 ADAS feature set.
+# Each requirement carries an ASIL, an architecture allocation, and the
+# verification method used to close it. The traceability tool reads this file.
+requirements:
+  - id: SYS-REQ-001
+    title: Maintain set speed when no lead vehicle is present
+    text: >
+      The ACC function shall maintain the driver-set speed within +/- 1.0 m/s
+      when no lead vehicle is detected within the sensor field of view.
+    asil: QM
+    allocated_to: [ACC_CONTROLLER]
+    verification: SIL
+    parent: STK-REQ-001
+
+  - id: SYS-REQ-002
+    title: Maintain time gap to lead vehicle
+    text: >
+      The ACC function shall maintain a time gap to the lead vehicle of not less
+      than 1.5 s in steady-state following.
+    asil: ASIL-B
+    allocated_to: [ACC_CONTROLLER, RADAR_IF]
+    verification: SIL
+    parent: STK-REQ-001
+
+  - id: SYS-REQ-003
+    title: Decelerate for a braking lead vehicle
+    text: >
+      On lead vehicle deceleration, the ACC function shall command deceleration
+      sufficient to avoid closing below the minimum safe distance.
+    asil: ASIL-D
+    allocated_to: [ACC_CONTROLLER, SAFETY_MONITOR]
+    verification: SIL
+    parent: STK-REQ-002
+
+  - id: SYS-REQ-004
+    title: Lane centering accuracy
+    text: >
+      The LKA function shall maintain lateral deviation from lane center of not
+      more than 0.30 m on curves with radius greater than 250 m.
+    asil: ASIL-B
+    allocated_to: [LKA_CONTROLLER, CAMERA_IF]
+    verification: SIL
+    parent: STK-REQ-003
+
+  - id: SYS-REQ-005
+    title: Degrade on camera signal loss
+    text: >
+      On loss of the camera lane signal for more than 300 ms, the system shall
+      disengage lateral control and issue a takeover request.
+    asil: ASIL-B
+    allocated_to: [SAFETY_MONITOR, HMI]
+    verification: SIL
+    parent: STK-REQ-004
+
+  - id: SYS-REQ-006
+    title: Hands-on-wheel supervision
+    text: >
+      The system shall issue a takeover request when hands-off-wheel time exceeds
+      15 s, and shall disengage lateral control if hands-off exceeds 25 s.
+    asil: ASIL-D
+    allocated_to: [SAFETY_MONITOR, HMI]
+    verification: SIL
+    parent: STK-REQ-004
+
+  - id: SYS-REQ-007
+    title: Bounded longitudinal authority
+    text: >
+      Commanded longitudinal acceleration shall remain within -3.5 to +2.0 m/s2
+      under all operating conditions.
+    asil: ASIL-C
+    allocated_to: [ACC_CONTROLLER, SAFETY_MONITOR]
+    verification: SIL
+    parent: STK-REQ-005
+
+  - id: SYS-REQ-008
+    title: Bounded lateral authority
+    text: >
+      Commanded steering rate shall remain within +/- 0.35 rad/s so the driver can
+      always override the system.
+    asil: ASIL-C
+    allocated_to: [LKA_CONTROLLER, SAFETY_MONITOR]
+    verification: SIL
+    parent: STK-REQ-005
+
+  - id: SYS-REQ-009
+    title: Operational design domain limits
+    text: >
+      The system shall operate only between 8 and 36 m/s and shall disengage
+      outside that range with a takeover request.
+    asil: ASIL-B
+    allocated_to: [SAFETY_MONITOR]
+    verification: SIL
+    parent: STK-REQ-004
+
+  - id: SYS-REQ-010
+    title: Sensor latency budget
+    text: >
+      End-to-end latency from sensor sample to actuator command shall not exceed
+      150 ms at the 95th percentile.
+    asil: ASIL-B
+    allocated_to: [RADAR_IF, CAMERA_IF, ACC_CONTROLLER, LKA_CONTROLLER]
+    verification: SIL
+    parent: STK-REQ-005
